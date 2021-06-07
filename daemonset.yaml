@@ -1,0 +1,38 @@
+apiVersion: "apps/v1"
+kind: "DaemonSet"
+metadata:
+  name: "navigator-elasticsearch-sysctl"
+  namespace: "kube-system"
+spec:
+  selector:
+    matchLabels:
+      app: "navigator-elasticsearch-sysctl"
+  template:
+    metadata:
+      labels:
+        app: "navigator-elasticsearch-sysctl"
+
+    spec:
+      containers:
+      - name: "apply-sysctl"
+        image: "busybox:latest"
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "8Mi"
+          requests:
+            cpu: "10m"
+            memory: "8Mi"
+        securityContext:
+          privileged: true
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          set -o errexit
+          set -o xtrace
+          #while sysctl -w net.netfilter.nf_conntrack_max=1310000 && sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=1
+          while sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=1
+          do
+            sleep 60s
+          done
