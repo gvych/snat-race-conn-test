@@ -13,3 +13,5 @@ jobs:
           #password: ${{ secrets.PACKAGES_TOKEN }}
           registry: ghcr.io
           repository: ${{ github.repository }}
+          tag_with_ref: true
+
